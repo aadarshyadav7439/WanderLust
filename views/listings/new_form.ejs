@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderLust</title>
+    <style>
+        input{
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid grey;
+            border-radius: 5%;
+        }
+    </style>
+</head>
+<body>
+    <h3>Fill the details of your new listing: </h3>
+    <form action="/listings" method="post">
+        <input name="listing[title]" type="text" placeholder="Enter title">
+        <br>
+        <textarea name="listing[description]" placeholder="Enter the description"></textarea>
+        <br>
+        <input type="listing[text]" name="image" placeholder="Enter image URL/link">
+        <br>
+        <input name="listing[price]" type="number" placeholder="Enter price in ₹">
+        <br>
+        <input name = "listing[location]" type="text" placeholder="Enter location">
+        <br>
+        <input type="text" name="listing[country]" placeholder="Enter country">
+        <br><br>
+        <button>Confirm and Submit</button>
+    </form>
+</body>
+</html>
