@@ -103,3 +103,8 @@ body {
   height: 2.4rem;
   margin-bottom: 1rem;
 }
+
+#title_show{
+  color: rgb(12, 115, 115);
+  font-size: x-large;
+}
