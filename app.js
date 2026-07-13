@@ -9,6 +9,9 @@ const wrapAsync = require("./utils/wrapasync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const wrapasync = require("./utils/wrapasync.js");
 const {listingSchema} = require("./schema.js");
+const Review = require("./models/review.js");
+
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
@@ -104,9 +107,24 @@ app.delete("/listings/:id",wrapAsync( async (req,res)=> {
     let id = req.params.id;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
-    res.redirect("/listings")
+    res.redirect("/listings");
 
 }));
+
+//reviews
+app.post("/listings/:id/reviews" , async (req,res)=>{
+    let id = req.params.id;
+    let listing = await Listing.findById(id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    console.log("new review saved");
+    res.redirect(`/listings/${id}`);
+});
 
 app.all("/*splat",(req,res,next)=>{
     next(new ExpressError(404, "Page Not Found!!!"));
@@ -122,3 +140,4 @@ app.use((err,req,res,next)=>{
 app.listen(8080, () => {
     console.log("Server is listening to port 8080");
 });
+
