@@ -10,9 +10,15 @@ const ExpressError = require("./utils/ExpressError.js");
 const wrapasync = require("./utils/wrapasync.js");
 const {listingSchema,reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js");
 
-const listings = require('./routes/listing.js');
-const reviews = require('./routes/review.js');
+const listingRouter = require('./routes/listing.js');
+const reviewRouter = require('./routes/review.js');
+const userRouter = require('./routes/user.js');
 
 
 app.set("view engine", "ejs");
@@ -34,13 +40,55 @@ main().then(()=>{
     console.log(err);
 });
 
+//session options
+const sessionOptions={
+    secret: "supersecretcode",
+    resave : false,
+    saveUninitialized : true,
+    cookie : {
+        expires : Date.now() + 1000*60*60*24,
+        maxAge : 1000 * 60 * 60 * 24,
+        httpOnly : true,
+    }
+}
+
 app.get("/", (req,res) => {
     res.send("Hi, I am the root route");
 });
 
+// using the session
+app.use(session(sessionOptions));
+app.use(flash());
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+//hum passport ko session ke baad me inmpelement karenge
+//taki session chalne ke baad fir authentication ka process start ho
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser()); //login karna
+passport.deserializeUser(User.deserializeUser()); //logout karna
+
+app.use((req, res, next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
+
+app.get('/demouser', async(req,res)=>{
+    let fakeUser = new User({
+        email:"fake238@gmail.com",
+        username: "im_fakeuser",
+    });
+    const newUsr = await User.register(fakeUser,"india123");
+    res.send(newUsr);
+});
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
+
 // app.get("/testListing" , async (req,res) => {
 //     let sampleListing = new Listing({
 //         title : "My New Villa",

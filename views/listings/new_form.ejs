@@ -5,11 +5,13 @@
     <h3>Fill the details of your new listing:</h3>
     <br>
     <form action="/listings" method="post" class="needs-validation" novalidate>
+
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input name="listing[title]" type="text" placeholder="Enter title" class="form-control" required/>
         <div class="invalid-feedback">Enter your Hotel name as title here</div>
       </div>
+
       <div  class="mb-3">
         <label for="description" class="form-label">Description</label>
         <textarea
@@ -20,16 +22,18 @@
         ></textarea>
         <div class="invalid-feedback">Description should be given of your Listing</div>
       </div>
+
       <div class="mb-3">
         <label for="image" class="form-label">Image</label>
         <input
-          type="listing[text]"
-          name="image"
+          name="listing[image]"
+          type="text"
           placeholder="Enter image URL/link"
           class="form-control"
         />
         <div class="valid-feedback">Image will be default if not given</div>
       </div>
+      
       <div class="row">
         <div class="mb-3 col-md-4">
           <label for="price" class="form-label">Price</label>
