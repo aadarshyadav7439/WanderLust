@@ -349,8 +349,4 @@ const sampleListings = [
   },
 ];
 
-sampleListings.forEach((listing) => {
-    listing.image = listing.image.url;
-});
-
 module.exports = { data: sampleListings };

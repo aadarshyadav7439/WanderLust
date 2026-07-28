@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -73,35 +77,14 @@ passport.deserializeUser(User.deserializeUser()); //logout karna
 app.use((req, res, next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 })
 
-app.get('/demouser', async(req,res)=>{
-    let fakeUser = new User({
-        email:"fake238@gmail.com",
-        username: "im_fakeuser",
-    });
-    const newUsr = await User.register(fakeUser,"india123");
-    res.send(newUsr);
-});
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
-
-// app.get("/testListing" , async (req,res) => {
-//     let sampleListing = new Listing({
-//         title : "My New Villa",
-//         description : "By the beach",
-//         price: 1200,
-//         location : "Calanguta , Goa",
-//         country : "India",
-//     });
-
-//     await sampleListing.save();
-//     console.log("sample was saved");
-//     res.send("Test Successfull");
-// });
 
 
 app.all("/*splat",(req,res,next)=>{

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
+const User = require("./user.js");
 
 
 const listingSchema = new Schema({
@@ -10,13 +11,8 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    default:
-      "https://static.vecteezy.com/system/resources/thumbnails/042/637/639/small/luxe-living-badge-opulent-modern-villa-icon-for-premium-branding-urban-utopia-insignia-stylish-emblem-with-modern-villa-design-vector.jpg",
-    set: (v) =>
-      v === ""
-        ? "https://img.favpng.com/16/25/14/hotel-colored-hotel-icon-for-travel-igmXdyZm_t.jpg"
-        : v,
+    url : String,
+    filename : String,
   },
 
   price: Number,
@@ -28,6 +24,10 @@ const listingSchema = new Schema({
       ref: "Review",
     }
   ],
+  owner:{
+    type : Schema.Types.ObjectId,
+    ref: "User",
+  }
 });
 
 listingSchema.post("findOneAndDelete", async function(listing){
