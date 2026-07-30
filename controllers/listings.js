@@ -1,9 +1,21 @@
 const Listing = require("../models/listing.js");
 const mongoose = require("mongoose")
 
-module.exports.index = async (req, res) =>{
-    const allListings = await Listing.find({});
-    res.render("./listings/index.ejs", {allListings});
+module.exports.index = async (req, res) => {
+    const { search } = req.query;
+    let allListings;
+    if (search) {
+        allListings = await Listing.find({
+            $or: [
+                { title: { $regex: search, $options: "i" } },
+                { location: { $regex: search, $options: "i" } },
+                { country: { $regex: search, $options: "i" } },
+            ],
+        });
+    } else {
+        allListings = await Listing.find({});
+    }
+    res.render("./listings/index.ejs", { allListings });
 };
 
 module.exports.renderNewForm = (req,res)=>{
@@ -84,4 +96,12 @@ module.exports.deleteListing = async (req,res)=> {
     console.log(deletedListing);
     req.flash("success" , "Deleted Successfully");
     res.redirect("/listings");
+};
+
+module.exports.filterCategory = async (req, res) => {
+    const { category } = req.params;
+    const allListings = await Listing.find({
+        category: category,
+    });
+    res.render("listings/index.ejs", { allListings });
 };

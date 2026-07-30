@@ -17,6 +17,9 @@ router.route("/")
 //get route for giving form
 router.get("/new", isLoggedIn , listingController.renderNewForm);
 
+//filter route
+router.get("/filter/:category", wrapAsync(listingController.filterCategory));
+
 //show, update and delete respectively.
 router.route("/:id")
 .get(wrapAsync(listingController.showListing))
