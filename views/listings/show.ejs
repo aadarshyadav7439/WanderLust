@@ -1,9 +1,9 @@
 <% layout("/layouts/boilerplate.ejs") %>
 <div class="row">
-    <div class="col-8 offset-2 mt-3">
+        <div class="col-8 offset-2 mt-3">
+            <h3 class="mb-1" id="title_show"><%=listing.title%></h3>
+        </div> 
 
-        <h3 class="mb-1" id="title_show"><%=listing.title%></h3>
-    </div>    
         <div class="card col-7 offset-2 listing-card" >
                 <img src="<%= listing.image.url%>" class="card-img-top show-img" alt="listing_img" style="height: 20rem;">
                 <div class="card-body">
@@ -61,8 +61,11 @@
             </form>
         </div>
         <% } %>
-            <div class="col-8 offset-2"><hr></div>
+        <% if(listing.reviews.length > 0){ %>
+        <div class="col-8 offset-2"><hr></div>
+        
         <div class="col-8 offset-2">
+            
             <h4 class="mb-3">All Reviews</h4>
             <div class="row">
                 <% for(review of listing.reviews){ %>
@@ -79,5 +82,17 @@
                 <% } %>
             </div>
         </div>
+        <% } %>
+
+        <div class="col-8 offset-2"><hr></div>
+        
+        <div class="col-8 offset-2 mb-3">
+            <h4>Where you'll be</h4>
+            <div id="map">
+            </div>
+        </div>
 </div>
+<script>
+    const locationName = "<%= listing.location %>, <%= listing.country %>";
+</script>
 

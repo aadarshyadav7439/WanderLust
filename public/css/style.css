@@ -111,3 +111,9 @@ body {
 .star{
   color: lch(81.03% 83.68 82.87);
 }
+
+#map {
+      height: 300px;
+      width: 75vh;
+      border-radius: 8px;
+}

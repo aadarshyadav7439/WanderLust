@@ -49,7 +49,16 @@ module.exports.createListing = async (req,res,next) => {
 module.exports.editForm = async (req,res) => {
     let id = req.params.id;
     const listing = await Listing.findById(id);
-    res.render("./listings/edit.ejs",{listing});
+    if(!listing){
+        req.flash("error","Requested listing doesn't exist");
+        res.redirect("/listings");
+    }
+
+    let originalImageUrl = listing.image.url;
+    console.log(originalImageUrl);
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250,e_blur:100");
+    console.log(originalImageUrl);
+    res.render("./listings/edit.ejs",{listing , originalImageUrl});
 };
 
 module.exports.updateValue = async (req,res) => {
