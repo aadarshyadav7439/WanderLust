@@ -8,7 +8,7 @@
                 <img src="<%= listing.image.url%>" class="card-img-top show-img" alt="listing_img" style="height: 20rem;">
                 <div class="card-body">
                     <p class="card-text" >
-                        <b>Owned by : </b><i><%= listing.owner.username %></i> <br>
+                        <b>Owned by : </b><i><%= listing.owner ? listing.owner.username : "Unknown" %></i> <br>
                         <%= listing.description %> <br>
                         ₹<%= listing.price.toLocaleString("en-IN") %> <br>
                         <%= listing.location %> <br>

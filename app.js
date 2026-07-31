@@ -15,6 +15,7 @@ const wrapasync = require("./utils/wrapasync.js");
 const {listingSchema,reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js");
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -23,6 +24,7 @@ const User = require("./models/user.js");
 const listingRouter = require('./routes/listing.js');
 const reviewRouter = require('./routes/review.js');
 const userRouter = require('./routes/user.js');
+const { error } = require('console');
 
 
 app.set("view engine", "ejs");
@@ -32,9 +34,10 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-const mongoURL = "mongodb://localhost:27017/wanderlust";
+const dbUrl = process.env.ATLAS_DB_URL;
+
 async function main() {
-    await mongoose.connect(mongoURL);
+    await mongoose.connect(dbUrl);
 };
 
 main().then(()=>{
@@ -44,17 +47,33 @@ main().then(()=>{
     console.log(err);
 });
 
+const secretCode = process.env.SECRET;
+// for storing session data in our database not locally which resets after refreshing
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto:{
+        secret: secretCode,
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error",(err)=>{
+    console.log("Error in Mongo Session Store", err);
+});
+
 //session options
 const sessionOptions={
-    secret: "supersecretcode",
+    store: store,
+    secret: secretCode,
     resave : false,
-    saveUninitialized : true,
+    saveUninitialized : false,
     cookie : {
         expires : Date.now() + 1000*60*60*24,
         maxAge : 1000 * 60 * 60 * 24,
         httpOnly : true,
     }
 }
+
 
 // using the session
 app.use(session(sessionOptions));

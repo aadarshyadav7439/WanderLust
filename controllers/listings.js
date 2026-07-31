@@ -1,21 +1,34 @@
 const Listing = require("../models/listing.js");
 const mongoose = require("mongoose")
 
+
 module.exports.index = async (req, res) => {
-    const { search } = req.query;
-    let allListings;
+    const { search, category } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 18;
+    const skip = (page - 1) * limit;
+    let query = {};
     if (search) {
-        allListings = await Listing.find({
-            $or: [
-                { title: { $regex: search, $options: "i" } },
-                { location: { $regex: search, $options: "i" } },
-                { country: { $regex: search, $options: "i" } },
-            ],
-        });
-    } else {
-        allListings = await Listing.find({});
+        query.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { location: { $regex: search, $options: "i" } },
+            { country: { $regex: search, $options: "i" } },
+        ];
     }
-    res.render("./listings/index.ejs", { allListings });
+    if (category) {
+        query.category = category;
+    }
+    const totalListings = await Listing.countDocuments(query);
+    const allListings = await Listing.find(query)
+        .skip(skip)
+        .limit(limit);
+    res.render("./listings/index.ejs", {
+        allListings,
+        currentPage: page,
+        totalPages: Math.ceil(totalListings / limit),
+        search,
+        category,
+    });
 };
 
 module.exports.renderNewForm = (req,res)=>{

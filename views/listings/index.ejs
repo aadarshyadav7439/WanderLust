@@ -149,7 +149,27 @@
                 </a>
                 <%}%>
         </div>
+        <div class="d-flex justify-content-center mt-4 mb-4">
 
+            <% if(currentPage> 1){ %>
+                <a class="btn btn-dark me-2 add-btn"
+                    href="/listings?page=<%= currentPage-1 %><%= search ? '&search=' + search : '' %><%= category ? '&category=' + category : '' %>">
+                    Previous
+                </a>
+                <% } %>
+
+                    <span class="btn btn-dark disabled">
+                        Page <%= currentPage %> of <%= totalPages %>
+                    </span>
+
+                    <% if(currentPage < totalPages){ %>
+                        <a class="btn btn-dark ms-2 add-btn"
+                            href="/listings?page=<%= currentPage+1 %><%= search ? '&search=' + search : '' %><%= category ? '&category=' + category : '' %>">
+                            Next
+                        </a>
+                        <% } %>
+
+        </div>
         <script>
             let taxSwitch = document.getElementById("switchCheckDefault");
             taxSwitch.addEventListener("click", () => {
