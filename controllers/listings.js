@@ -75,6 +75,11 @@ module.exports.editForm = async (req,res) => {
 
 module.exports.updateValue = async (req,res) => {
     let id = req.params.id;
+    // If no category is selected, save an empty array
+    if (!req.body.listing.category) {
+        req.body.listing.category = [];
+    }
+
     let listing = await Listing.findByIdAndUpdate(id, {...req.body.listing});
 
     if(typeof req.file !== "undefined"){

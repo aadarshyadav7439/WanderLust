@@ -1,92 +1,86 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <body>
-      <h3>Edit details of your listing:</h3>
-      <form action="/listings/<%=listing._id%>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-3 mt-2">
-          <label for="title" class="form-label">Title</label>
-          <input
-            name="listing[title]"
-            type="text"
-            value="<%= listing.title %>"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Title should be valid</div>
-        </div>
-        <br />
-    
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <textarea
-            name="listing[description]"
-            rows="5"
-            cols="100"
-            class="form-control"
-            required><%= listing.description %>
+  <div class="row mt-3">
+    <div class="col-8 offset-2">
+
+      <body>
+        <h3>Edit details of your listing:</h3>
+        <form action="/listings/<%=listing._id%>?_method=PUT" method="post" novalidate class="needs-validation"
+          enctype="multipart/form-data">
+          <div class="mb-3 mt-2">
+            <label for="title" class="form-label">Title</label>
+            <input name="listing[title]" type="text" value="<%= listing.title %>" class="form-control" required />
+            <div class="invalid-feedback">Title should be valid</div>
+          </div>
+          <br />
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" rows="5" cols="100" class="form-control" required><%= listing.description %>
           </textarea>
-          <div class="invalid-feedback">valid description is not given</div>
-        </div>
-        <br />
+            <div class="invalid-feedback">valid description is not given</div>
+          </div>
+          <br />
 
-        <div class="mb-3">
-          Original Listing Image  <br>
-          <img src="<%= originalImageUrl %>">
-        </div>
-    
-        <div class="mb-3">
-          <label for="image" class="form-label">Upload Image</label>
-          <input
-            type="file"
-            name="listing[image]"
-            class="form-control"
-          />
-        </div>
-        <br />
-
-        <div class="row">
-          <div class="mb-3 col-md-4">
-            <label for="price" class="form-label">Price</label>
-            <input
-              name="listing[price]"
-              type="number"
-              value="<%= listing.price %>"
-              class="form-control"
-              required
-            />
-            <div class="invalid-feedback">Price should be valid</div>
+          <div class="mb-3">
+            Original Listing Image <br>
+            <img src="<%= originalImageUrl %>">
           </div>
 
-          <div class="mb-3 col-md-8">
-          <label for="country" class="form-label">Country</label>
-          <input
-            type="text"
-            name="listing[country]"
-            value="<%= listing.country %>"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">valid country is not given</div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Image</label>
+            <input type="file" name="listing[image]" class="form-control" />
           </div>
-        </div>
-        <br />
-    
-        <div  class="mb-3">
-          <label for="location" class="form-label">Location</label>
-          <input
-            name="listing[location]"
-            type="text"
-            value="<%= listing.location %>"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Location is not valid</div>
-        </div>
-    
-        <br />
-        <button class="add-btn btn btn-dark d-block mx-3 mb-3">Edit</button>
-      </form>
-    </body>
+          <br />
+
+          <div class="row">
+            <div class="mb-3 col-md-4">
+              <label for="price" class="form-label">Price</label>
+              <input name="listing[price]" type="number" value="<%= listing.price %>" class="form-control" required />
+              <div class="invalid-feedback">Price should be valid</div>
+            </div>
+
+            <div class="mb-3 col-md-8">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required />
+              <div class="invalid-feedback">valid country is not given</div>
+            </div>
+          </div>
+          <br />
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input name="listing[location]" type="text" value="<%= listing.location %>" class="form-control" required />
+            <div class="invalid-feedback">Location is not valid</div>
+          </div>
+          <br />
+
+          <div class="mb-3">
+            <label class="form-label"><b>Categories</b></label>
+
+            <% const categories=[ "Trending" , "Rooms" , "Iconic Cities" , "Mountain" , "Castles" , "Pools" , "Camping"
+              , "Farms" , "Arctic" , "Domes" , "Boats" ]; %>
+
+              <div class="row">
+                <% categories.forEach(category=> { %>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="listing[category]" value="<%= category %>"
+                        id="<%= category %>" <%=listing.category && listing.category.includes(category) ? "checked" : ""
+                        %>
+                      >
+
+                      <label class="form-check-label" for="<%= category %>">
+                        <%= category %>
+                      </label>
+                    </div>
+                  </div>
+                  <% }) %>
+              </div>
+          </div>
+
+          <br />
+          <button class="add-btn btn btn-dark d-block mx-3 mb-3">Edit</button>
+        </form>
+      </body>
+    </div>
   </div>
-</div>
